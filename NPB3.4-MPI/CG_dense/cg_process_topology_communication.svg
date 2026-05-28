@@ -1,0 +1,180 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="940" viewBox="0 0 1500 940" role="img" aria-labelledby="title desc">
+  <title id="title">NAS CG MPI process topology and communication pattern</title>
+  <desc id="desc">Illustration of the NAS Parallel Benchmarks CG process grid, sparse matrix-vector communication, and vector-vector reductions.</desc>
+  <defs>
+    <style>
+      .bg { fill: #f7f4ee; }
+      .panel { fill: #ffffff; stroke: #242424; stroke-width: 2; }
+      .grid-cell { fill: #eef3f8; stroke: #27384a; stroke-width: 2; }
+      .grid-cell-alt { fill: #f5e9dc; stroke: #27384a; stroke-width: 2; }
+      .row-band { fill: #5b8fb9; opacity: 0.16; }
+      .col-band { fill: #d58a4a; opacity: 0.18; }
+      .matrix { fill: #eef3f8; stroke: #27384a; stroke-width: 2; }
+      .vector { fill: #f5e9dc; stroke: #7a4a1f; stroke-width: 2; }
+      .local { fill: #dcebd8; stroke: #315d36; stroke-width: 2; }
+      .reduce { fill: none; stroke: #286c9a; stroke-width: 5; marker-end: url(#arrow-blue); }
+      .exchange { fill: none; stroke: #b85f21; stroke-width: 5; stroke-dasharray: 11 8; marker-end: url(#arrow-orange); }
+      .scalar { fill: none; stroke: #477643; stroke-width: 5; marker-end: url(#arrow-green); }
+      .thin { stroke-width: 2.5; }
+      .title { font: 700 34px Arial, sans-serif; fill: #1e252b; }
+      .subtitle { font: 600 22px Arial, sans-serif; fill: #27384a; }
+      .label { font: 17px Arial, sans-serif; fill: #1f262b; }
+      .small { font: 14px Arial, sans-serif; fill: #2f363b; }
+      .code { font: 15px "Courier New", monospace; fill: #222; }
+      .white { fill: #fff; }
+      .muted { fill: #5b6268; }
+    </style>
+    <marker id="arrow-blue" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+      <path d="M 1 1 L 11 6 L 1 11 z" fill="#286c9a"/>
+    </marker>
+    <marker id="arrow-orange" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+      <path d="M 1 1 L 11 6 L 1 11 z" fill="#b85f21"/>
+    </marker>
+    <marker id="arrow-green" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+      <path d="M 1 1 L 11 6 L 1 11 z" fill="#477643"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" width="1500" height="940"/>
+  <text x="60" y="62" class="title">CG: MPI process topology and communication pattern</text>
+  <text x="60" y="94" class="label muted">Based on cg.f90: setup_submatrix_info and conj_grad</text>
+
+  <rect x="45" y="125" width="430" height="735" rx="8" class="panel"/>
+  <rect x="535" y="125" width="440" height="735" rx="8" class="panel"/>
+  <rect x="1035" y="125" width="420" height="735" rx="8" class="panel"/>
+
+  <text x="75" y="172" class="subtitle">1. Process topology</text>
+  <text x="75" y="204" class="label">Ranks form a 2D grid:</text>
+  <text x="75" y="229" class="code">proc_row = me / npcols</text>
+  <text x="75" y="251" class="code">proc_col = me - proc_row*npcols</text>
+
+  <g transform="translate(95 300)">
+    <rect x="0" y="-52" width="320" height="48" class="row-band"/>
+    <rect x="107" y="-52" width="106" height="252" class="col-band"/>
+    <text x="-16" y="-20" class="small" text-anchor="end">row 0</text>
+    <text x="-16" y="64" class="small" text-anchor="end">row 1</text>
+    <text x="-16" y="148" class="small" text-anchor="end">row 2</text>
+    <text x="53" y="-72" class="small" text-anchor="middle">col 0</text>
+    <text x="160" y="-72" class="small" text-anchor="middle">col 1</text>
+    <text x="267" y="-72" class="small" text-anchor="middle">col 2</text>
+
+    <rect x="0" y="-52" width="106" height="84" class="grid-cell"/>
+    <rect x="107" y="-52" width="106" height="84" class="grid-cell-alt"/>
+    <rect x="214" y="-52" width="106" height="84" class="grid-cell"/>
+    <rect x="0" y="32" width="106" height="84" class="grid-cell-alt"/>
+    <rect x="107" y="32" width="106" height="84" class="grid-cell"/>
+    <rect x="214" y="32" width="106" height="84" class="grid-cell-alt"/>
+    <rect x="0" y="116" width="106" height="84" class="grid-cell"/>
+    <rect x="107" y="116" width="106" height="84" class="grid-cell-alt"/>
+    <rect x="214" y="116" width="106" height="84" class="grid-cell"/>
+
+    <text x="53" y="-13" class="label" text-anchor="middle">P0</text>
+    <text x="160" y="-13" class="label" text-anchor="middle">P1</text>
+    <text x="267" y="-13" class="label" text-anchor="middle">P2</text>
+    <text x="53" y="71" class="label" text-anchor="middle">P3</text>
+    <text x="160" y="71" class="label" text-anchor="middle">P4</text>
+    <text x="267" y="71" class="label" text-anchor="middle">P5</text>
+    <text x="53" y="155" class="label" text-anchor="middle">P6</text>
+    <text x="160" y="155" class="label" text-anchor="middle">P7</text>
+    <text x="267" y="155" class="label" text-anchor="middle">P8</text>
+  </g>
+
+  <rect x="82" y="540" width="165" height="80" class="matrix"/>
+  <rect x="246" y="540" width="165" height="80" class="matrix"/>
+  <rect x="82" y="620" width="165" height="80" class="matrix"/>
+  <rect x="246" y="620" width="165" height="80" class="matrix"/>
+  <line x1="247" y1="540" x2="247" y2="700" stroke="#27384a" stroke-width="2"/>
+  <line x1="82" y1="620" x2="411" y2="620" stroke="#27384a" stroke-width="2"/>
+  <text x="164" y="586" class="small" text-anchor="middle">A block</text>
+  <text x="329" y="586" class="small" text-anchor="middle">A block</text>
+  <text x="164" y="666" class="small" text-anchor="middle">A block</text>
+  <text x="329" y="666" class="small" text-anchor="middle">A block</text>
+  <text x="75" y="735" class="label">Rows split by <tspan class="code">proc_row</tspan></text>
+  <text x="75" y="762" class="label">Vector columns split by <tspan class="code">proc_col</tspan></text>
+  <text x="75" y="789" class="label">Each row communicator is <tspan class="code">comm_row</tspan></text>
+
+  <text x="565" y="172" class="subtitle">2. Matrix-vector multiply</text>
+  <text x="565" y="204" class="label">Used for <tspan class="code">q = A*p</tspan> and residual <tspan class="code">A*z</tspan></text>
+
+  <g transform="translate(580 255)">
+    <rect x="0" y="0" width="165" height="175" class="matrix"/>
+    <line x1="55" y1="0" x2="55" y2="175" stroke="#27384a" stroke-width="1.5"/>
+    <line x1="110" y1="0" x2="110" y2="175" stroke="#27384a" stroke-width="1.5"/>
+    <line x1="0" y1="58" x2="165" y2="58" stroke="#27384a" stroke-width="1.5"/>
+    <line x1="0" y1="116" x2="165" y2="116" stroke="#27384a" stroke-width="1.5"/>
+    <text x="82" y="-18" class="small" text-anchor="middle">local sparse A rows</text>
+    <rect x="210" y="15" width="52" height="145" class="vector"/>
+    <line x1="210" y1="63" x2="262" y2="63" stroke="#7a4a1f" stroke-width="1.5"/>
+    <line x1="210" y1="111" x2="262" y2="111" stroke="#7a4a1f" stroke-width="1.5"/>
+    <text x="236" y="-18" class="small" text-anchor="middle">p or z slice</text>
+    <path d="M 177 88 C 188 88 195 88 206 88" class="scalar thin"/>
+    <rect x="315" y="30" width="75" height="115" class="local"/>
+    <text x="352" y="83" class="label" text-anchor="middle">w</text>
+    <text x="352" y="107" class="small" text-anchor="middle">partial</text>
+    <path d="M 270 88 C 287 88 297 88 310 88" class="scalar thin"/>
+  </g>
+
+  <path d="M 575 505 C 680 455 815 455 930 505" class="reduce"/>
+  <text x="755" y="474" class="label" text-anchor="middle">MPI_Allreduce(w, q, SUM, comm_row)</text>
+  <text x="755" y="501" class="small" text-anchor="middle">sums partial A*p values from all process columns in the same grid row</text>
+
+  <g transform="translate(625 560)">
+    <rect x="0" y="0" width="62" height="160" class="vector"/>
+    <rect x="105" y="0" width="62" height="160" class="vector"/>
+    <rect x="210" y="0" width="62" height="160" class="vector"/>
+    <text x="31" y="72" class="label" text-anchor="middle">q</text>
+    <text x="136" y="72" class="label" text-anchor="middle">q</text>
+    <text x="241" y="72" class="label" text-anchor="middle">q</text>
+    <text x="31" y="102" class="small" text-anchor="middle">row</text>
+    <text x="136" y="102" class="small" text-anchor="middle">result</text>
+    <text x="241" y="102" class="small" text-anchor="middle">copy</text>
+  </g>
+  <path d="M 654 746 C 714 810 832 810 890 746" class="exchange"/>
+  <text x="755" y="833" class="label" text-anchor="middle">MPI_Alltoallv with transpose partner</text>
+  <text x="755" y="858" class="small" text-anchor="middle">moves the row-distributed result back into the vector-column layout</text>
+
+  <text x="1065" y="172" class="subtitle">3. Vector-vector operations</text>
+  <text x="1065" y="204" class="label">Dot products are local sums followed by row reductions.</text>
+
+  <g transform="translate(1085 260)">
+    <rect x="0" y="0" width="70" height="195" class="vector"/>
+    <rect x="95" y="0" width="70" height="195" class="vector"/>
+    <line x1="0" y1="49" x2="70" y2="49" stroke="#7a4a1f" stroke-width="1.4"/>
+    <line x1="95" y1="49" x2="165" y2="49" stroke="#7a4a1f" stroke-width="1.4"/>
+    <line x1="0" y1="98" x2="70" y2="98" stroke="#7a4a1f" stroke-width="1.4"/>
+    <line x1="95" y1="98" x2="165" y2="98" stroke="#7a4a1f" stroke-width="1.4"/>
+    <line x1="0" y1="147" x2="70" y2="147" stroke="#7a4a1f" stroke-width="1.4"/>
+    <line x1="95" y1="147" x2="165" y2="147" stroke="#7a4a1f" stroke-width="1.4"/>
+    <text x="35" y="-18" class="small" text-anchor="middle">p, r, x</text>
+    <text x="130" y="-18" class="small" text-anchor="middle">q, z</text>
+    <text x="35" y="105" class="label" text-anchor="middle">local</text>
+    <text x="130" y="105" class="label" text-anchor="middle">local</text>
+    <path d="M 183 96 C 210 96 230 96 252 96" class="scalar"/>
+    <rect x="265" y="54" width="90" height="84" class="local"/>
+    <text x="310" y="88" class="label" text-anchor="middle">sum</text>
+    <text x="310" y="113" class="small" text-anchor="middle">scalar</text>
+  </g>
+
+  <path d="M 1110 545 C 1195 500 1300 500 1392 545" class="reduce"/>
+  <text x="1250" y="515" class="label" text-anchor="middle">MPI_Allreduce(scalar, SUM, comm_row)</text>
+  <text x="1250" y="542" class="small" text-anchor="middle">rho = r.r, d = p.q, x.z, z.z, residual norm</text>
+
+  <g transform="translate(1085 610)">
+    <rect x="0" y="0" width="330" height="180" fill="#f9faf6" stroke="#477643" stroke-width="2"/>
+    <text x="22" y="36" class="code">rho = allreduce(sum(r*r))</text>
+    <text x="22" y="68" class="code">d   = allreduce(sum(p*q))</text>
+    <text x="22" y="100" class="code">alpha = rho / d</text>
+    <text x="22" y="132" class="code">beta  = rho / rho0</text>
+    <text x="22" y="164" class="code">x = z / sqrt(allreduce(z*z))</text>
+  </g>
+
+  <g transform="translate(75 865)">
+    <rect x="0" y="0" width="1350" height="42" fill="#ffffff" stroke="#d4cec4" stroke-width="1.5"/>
+    <line x1="35" y1="21" x2="95" y2="21" class="reduce"/>
+    <text x="112" y="27" class="small">row all-reduce on comm_row</text>
+    <line x1="360" y1="21" x2="420" y2="21" class="exchange"/>
+    <text x="438" y="27" class="small">transpose-partner all-to-all exchange on comm_solve</text>
+    <line x1="805" y1="21" x2="865" y2="21" class="scalar"/>
+    <text x="882" y="27" class="small">local compute / scalar flow</text>
+  </g>
+</svg>
